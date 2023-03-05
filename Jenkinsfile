@@ -1,10 +1,13 @@
 pipeline  {
     agent { label 'JDK_8' }
+    parameters {
+        choice(name: 'MAVEN_GOAL', choices: ['package', 'install', 'clean'])
+    }
     stages {
         stage('vcs') {
             steps {
                 git url: 'https://github.com/qtrajkumarmarch23/game-of-life.git',
-                    branch: 'main'
+                    branch: 'master'
             }
         }
         stage('package') {
