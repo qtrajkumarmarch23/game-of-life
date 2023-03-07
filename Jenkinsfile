@@ -1,8 +1,5 @@
 pipeline  {
     agent { label 'JDK_8' }
-    parameters {
-        choice(name: 'MAVEN_GOAL', choices: ['package', 'install', 'clean'])
-    }
     stages {
         stage('vcs') {
             steps {
@@ -11,11 +8,8 @@ pipeline  {
             }
         }
         stage('package') {
-            tools {
-                jdk 'JDK_8'
-            }
             steps {
-                sh "mvn ${params.MAVEN_GOAL}"
+                sh 'mvn package'
             }
         }
         stage('post build') {
