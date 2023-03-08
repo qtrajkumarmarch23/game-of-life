@@ -1,6 +1,9 @@
-pipeline  {
+pipeline {
     agent { label 'JDK_8' }
-    triggers { pollSCM '* * * * *' }
+    triggers { pollSCM ('* * * * *') }
+    parameters {
+        choice(name: 'MAVEN_GOAL', choices: ['package', 'install', 'clean'], description: 'MAVEN_GOAL')
+    }
     stages {
         stage('vcs') {
             steps {
@@ -9,13 +12,16 @@ pipeline  {
             }
         }
         stage('package') {
+            tools {
+                jdk 'JDK_8'
+            }
             steps {
-                sh 'export PATH="/usr/lib/jvm/java-1.8.0-openjdk-amd64/bin:$PATH" && 'clean package''
+                sh "mvn ${params.MAVEN_GOAL}"
             }
         }
         stage('post build') {
             steps {
-                archiveArtifacts artifacts: '**/target/game-of-life.war',
+                archiveArtifacts artifacts: '**/target/game-of-life.jar',
                                  onlyIfSuccessful: true
                 junit testResults: '**/surefire-reports/TEST-*.xml'                 
             }
