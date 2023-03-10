@@ -22,7 +22,7 @@ pipeline {
         stage('sonar analysis') {
             steps {
                 // performing sonarqube analysis with "withSonarQubeENV(<Name of Server configured in Jenkins>)"
-                withSonarQubeEnv('SONAR_CLOUD') {
+                withSonarQubeEnv('SONAR_CLOUD_GAMEOFLIFE') {
                     sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=gameoflife07_sonar -Dsonar.organization=gameoflife07'
                 }
             }
